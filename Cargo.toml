@@ -2,8 +2,11 @@
 name = "totally-speedy-transmute"
 version = "1.69.420"
 edition = "2018"
+repository = "https://github.com/John2143/totally-speedy-transmute/"
+license = "MIT"
+description = "does safe things with your safe data"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-safe = { path = "safe" }
+safe = { path = "safe", version = "0.1.0", package = "friendly_safety_buddy"}

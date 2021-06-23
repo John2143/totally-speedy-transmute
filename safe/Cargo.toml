@@ -1,7 +1,10 @@
 [package]
-name = "safe"
+name = "friendly_safety_buddy"
 version = "0.1.0"
 edition = "2018"
+repository = "https://github.com/John2143/totally-speedy-transmute/"
+license = "MIT"
+description = "A fun macro to write safe code with"
 
 [lib]
 crate-type = ["proc-macro"]
