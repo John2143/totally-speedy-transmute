@@ -1,4 +1,4 @@
-use totally_speedy_transmute::{add_one, safe, speedy_transmute};
+use totally_speedy_transmute::{add_one, leak2, safe, speedy_transmute};
 
 #[test]
 fn oops_all_mutable() {
@@ -8,7 +8,7 @@ fn oops_all_mutable() {
     //give add_one immutable access
     add_one(&x);
 
-    //oops now it's 8
+    //oops now it's 8, hope they don't notice
     assert_eq!(x, 8);
 }
 
@@ -39,26 +39,43 @@ fn fast_vec() {
     assert_eq!(b[6], 4);
 
     //I just wish it was a little bit bigger. and mutable.
-    //Allocating a new box is slow, so just re-use the old one
+    //But allocating a new box is slow, so just re-use the old one
     let mut bigger_box: Box<[u8; 11]> = speedy_transmute(b);
 
-    //keep the old data
+    //old data is ok
     assert_eq!(bigger_box[6], 4);
 
-    //use that extra byte
+    //use that extra byte responsibly
     bigger_box[10] = 100;
 
     assert_eq!(bigger_box[10], 100);
 
-    //allocator doesn't know
+    //allocator doesn't know PepeLaugh
     drop(bigger_box);
 }
 
 #[test]
-fn read_own_executable() {
+fn safe() {
     //The heap was OK, but how about in .text?
     let x = &[1, 2, 3] as &[i32];
 
     //yep, seems good to me
+    //SAFETY: your program is probably longer than 400 bytes.
     let _ = safe! { x.get_unchecked(400) };
+}
+
+#[test]
+fn leek() {
+    fn static_enojoyer(s: &mut i32) {
+        *s += 2;
+    }
+
+    let whereami = {
+        let five = 5;
+
+        leak2(&five)
+    };
+
+    //whose five is it anyway
+    static_enojoyer(whereami);
 }
